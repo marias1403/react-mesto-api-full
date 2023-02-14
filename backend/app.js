@@ -22,6 +22,22 @@ app.use(express.urlencoded({ extended: true }));
 
 app.use(requestLogger);
 
+app.use(function(req, res, next) {
+  const { origin } = req.headers;
+  if (allowedCors.includes(origin)) {
+    res.header('Access-Control-Allow-Origin', '*');
+  }
+
+  const requestHeaders = req.headers['access-control-request-headers'];
+  const { method } = req;
+
+  if (method === 'OPTIONS') {
+    res.header('Access-Control-Allow-Methods', requestHeaders);
+  }
+
+  next();
+});
+
 app.post('/signup', validateUserBody, createUser);
 app.post('/signin', validateAuthentication, login);
 
