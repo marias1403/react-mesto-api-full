@@ -36,9 +36,14 @@ class Api {
     })
   }
 
-  changeLikeCardStatus(cardId) {
+  changeLikeCardStatus(cardId, isLiked) {
+    let method = 'PUT';
+    if (!isLiked) {
+      method = 'DELETE';
+    }
+
     return this._request(this._baseUrl + 'cards/' + cardId + '/likes', {
-      method: 'PUT',
+      method: method,
       headers: this._header,
     })
   }
@@ -51,6 +56,9 @@ class Api {
   }
 
   _request(url, options) {
+    const jwt = localStorage.getItem('jwt');
+    options.headers.Authorization = "Bearer " + jwt;
+
     return fetch(url, options).then(this._checkResponse);
   }
 
@@ -65,7 +73,6 @@ class Api {
 const api = new Api({
   baseUrl: 'https://api.mesto.marias.nomoredomains.work/',
   headers: {
-    authorization: 'ae672644-5499-4af4-bef5-295b969af30e',
     'Content-Type': 'application/json',
   }
 });

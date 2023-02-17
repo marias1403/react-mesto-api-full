@@ -14,6 +14,7 @@ import Login from "./Login";
 import Register from "./Register";
 import InfoTooltip from "./InfoTooltip";
 import * as auth from '../utils/auth.js';
+import card from "./Card";
 
 function App() {
   const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = useState(false);
@@ -31,8 +32,16 @@ function App() {
   useEffect(() => {
     if (isLoggedIn) {
       api.getInitialsCards()
+        .then(res => res.data)
         .then(data => {
-          setCards(data.map((cardData) => (mapCardDataToState(cardData))))
+          setCards(data.map((cardData) => {
+            const likes = [];
+            for (let like of cardData.likes) {
+              likes.push(like._id);
+            }
+
+            return mapCardDataToState(cardData, likes, cardData.owner._id);
+          }))
         })
         .catch((err) => {
           console.log(err);
@@ -60,9 +69,9 @@ function App() {
   }, [isLoggedIn])
 
   function handleCardLike(card) {
-    const isLiked = card.likes.some(i => i._id === currentUser._id);
-    api.changeLikeCardStatus(card.idCard, !isLiked).then((newCard) => {
-      setCards((state) => state.map((c) => c.idCard === card.idCard ? mapCardDataToState(newCard) : c));
+    const isLiked = card.likes.some(i => i === currentUser._id);
+    api.changeLikeCardStatus(card.idCard, !isLiked).then(res => res.data).then((newCard) => {
+      setCards((state) => state.map((c) => c.idCard === card.idCard ? mapCardDataToState(newCard, newCard.likes, newCard.owner) : c));
     })
       .catch((err) => {
         console.log(err);
@@ -79,20 +88,26 @@ function App() {
       })
   }
 
-  function mapCardDataToState(card) {
+  function mapCardDataToState(card, likes, owner) {
     return {
       idCard: card._id,
       image: card.link,
       title: card.name,
-      likes: card.likes,
-      owner: card.owner._id,
+      likes,
+      owner,
     }
   }
 
   function handleAddPlaceSubmit({ name, link }) {
     api.addCard({ name: name, link: link })
+      .then(res => res.data)
       .then((newCard) => {
-        setCards([mapCardDataToState(newCard), ...cards]);
+        const likes = [];
+        for (let like of newCard.likes) {
+          likes.push(like._id);
+        }
+
+        setCards([mapCardDataToState(newCard, likes, newCard.owner), ...cards]);
         closeAllPopups();
     })
       .catch((err) => {
@@ -103,6 +118,7 @@ function App() {
   useEffect(() => {
     if (isLoggedIn) {
       api.getUserInfo()
+        .then(res => res.data)
         .then(user => setCurrentUser(user))
         .catch((err) => {
           console.log(err);

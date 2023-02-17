@@ -30,7 +30,10 @@ app.use(function(req, res, next) {
   const { method } = req;
 
   if (method === 'OPTIONS') {
-    res.header('Access-Control-Allow-Methods', requestHeaders);
+    res.header('Access-Control-Allow-Methods', 'GET,HEAD,POST,PUT,DELETE,PATCH');
+    res.header('Access-Control-Allow-Headers', requestHeaders);
+
+    return res.end();
   }
 
   next();

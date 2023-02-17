@@ -3,6 +3,8 @@
   
 Пожалуйста, прикрепите в это описание ссылку на сайт, размещенный на Яндекс.Облаке.
 
-IP  158.160.48.30
+IP 51.250.84.39
+
 Frontend  https://mesto.marias.nomoredomainsclub.ru
+
 Backend  https://api.mesto.marias.nomoredomains.work
