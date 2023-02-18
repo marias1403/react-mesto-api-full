@@ -11,6 +11,8 @@ module.exports = {
     sourceType: 'module',
   },
   rules: {
+    'no-console': 'off',
+    'consistent-return': 'off',
     'no-underscore-dangle': [
       'error',
       {
