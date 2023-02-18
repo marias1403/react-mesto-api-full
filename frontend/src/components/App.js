@@ -157,6 +157,7 @@ function App() {
 
   function handleUpdateUser({ name, about }) {
     api.editProfile({ name, about })
+      .then(res => res.data)
       .then((user) => {
         setCurrentUser(user);
         closeAllPopups();
@@ -168,6 +169,7 @@ function App() {
 
   function handleUpdateAvatar({ avatar }) {
     api.changeAvatar({ avatar: avatar })
+      .then(res => res.data)
       .then((user) => {
         setCurrentUser(user);
         closeAllPopups();
