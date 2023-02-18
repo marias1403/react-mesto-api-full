@@ -21,9 +21,9 @@
   },
   "homepage": "https://github.com/marias1403/express-mesto-gha#readme",
   "devDependencies": {
-    "eslint": "^8.31.0",
+    "eslint": "^8.34.0",
     "eslint-config-airbnb-base": "^15.0.0",
-    "eslint-plugin-import": "^2.26.0",
+    "eslint-plugin-import": "^2.27.5",
     "nodemon": "^2.0.20"
   },
   "dependencies": {
